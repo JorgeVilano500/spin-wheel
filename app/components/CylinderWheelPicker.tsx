@@ -2,6 +2,7 @@
 import React from 'react'; 
 
 import { WheelPreset } from '../lib/Wheels';
+import MobileDoubleTap from '../lib/MobileDoubleTap';
 
 type Props = { 
     presets: WheelPreset[]; 
@@ -12,6 +13,7 @@ type Props = {
 
 
 export default function CylinderWheelPicker({presets, activeId, onSelect, onDoubleClick}:Props) {
+    const dt = MobileDoubleTap(() => onDoubleClick(activeId!))
 
 
     return (
@@ -43,6 +45,8 @@ export default function CylinderWheelPicker({presets, activeId, onSelect, onDoub
                                             key={p.id}
                                             onClick={() => onSelect(p.id)}
                                             onDoubleClick={() => onDoubleClick(p.id)}
+                                            {...dt}
+                                            
                                             className={[
                                                 "w-10 h-10 cursor-pointer rounded-full flex items-center justify-center text-xs font-semibold",
                                                 "transition-transform",

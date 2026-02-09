@@ -1,6 +1,6 @@
 "use client"
 import React, {useState, useMemo, useEffect} from 'react'
-import {CylinderWheelPicker, Wheel} from './index'
+import {CylinderWheelPicker, SelectOptions, Wheel} from './index'
 import { fireConfetti } from '../lib/Confetti'
 import {GameMode, Preloaded} from '../lib/Preloaded'
 
@@ -67,6 +67,7 @@ export default function WheelForm () {
     }
     
     const doubleClickDelete = (id: string) => {
+        if (presets.length === 1) return
     
         setPresets((prev) => 
              prev.filter((x)=> x.id !=  id))
@@ -110,7 +111,7 @@ export default function WheelForm () {
     }, [presets])
 
     return (
-        <div className='p-6 flex flex-col gap-4 items-center'>
+        <div className='p-6 mx-auto w-full max-w-screen flex flex-col gap-4 items-center w-full'>
             <h1 className='text-6xl font-bold'>
                 Spin the Wheel
             </h1>
@@ -119,7 +120,7 @@ export default function WheelForm () {
             </h2>
             {winner && <div className='text-lg text-red-600'>Winner: <b>{winner}</b></div>}
 
-        <section className='flex flex-row gap-4'>
+        <section className='flex flex-row gap-4 w-full justify-around '>
 
             <div className=''>
                 <div className='pt-4'>  
@@ -150,7 +151,7 @@ export default function WheelForm () {
                     spinning={spinning}
                     durationMs={4000}
                     formatLabel={(label) => (label.length > 14 ? label.slice(0, 14) + "..." : label)}
-                    className='mx-4'
+                    className='mx-auto'
                     onSpinEnd={
                         ({winnerValue}) => {
                             setWinner(winnerValue)
@@ -169,50 +170,24 @@ export default function WheelForm () {
 
             </section>
 
+                    <SelectOptions
+                        raw={raw}
+                        setRaw={setRaw}
+                        saveActionWheelItems={saveActionWheelItems}
+                    />
 
-                    <section className='text-center flex flex-col justify-between gap-4 w-48'>
-
-                        {/* Will create a section to decide how the wheel decides to spin  */}
-                        {/* So far, Battle royale (last one standing, will be automatically removing each item after spinning), One from each list, default (what it is right now), First pick is the winner  */}
-
-                        <select
-                            className='bg-zinc-300'
-                        >
-                            {
-                                GameMode.map((item, i) => (
-                                    <option>{item.name}</option>
-                                ))
-                            }
-                        </select>
-
-                        <select onChange={(e) => {
-                            console.log(e.target.value)
-                            setRaw(e.target.value)
-                            }} className='bg-zinc-300 '>
-                                <option value={["A", "B", "C"].join("\n")}>Choose your options</option>
-                            {Preloaded.map((item, i) => (
-                                <option  value={item.options.join("\n")}>{item.name}</option>
-                            ))}
-                        </select>
-
-                      
-                        <textarea
-                                value={raw}
-                                placeholder='One Per entry'
-                                className='w-full h-[50%] my-auto bg-zinc-400 max-w-md min-h-[140px] border rounded-xl p-3'
-                                onChange={(e) => setRaw(e.target.value)}
-                                />
-                                <button 
-                                    onClick={saveActionWheelItems}
-                                    className='px-4 py-2 rounded-xl bg-black text-white cursor-pointer'
-                                > 
-                                    Save Wheel List
-                                </button>
-                      
-                </section>
+                    
 
 </section>
             
+<div className='lg:hidden '>
+                        <SelectOptions
+                            raw={raw}
+                            setRaw={setRaw}
+                            saveActionWheelItems={saveActionWheelItems}
+                        />
+
+                    </div>
 
         </div>
     )

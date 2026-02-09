@@ -6,7 +6,7 @@ export default async function Home() {
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-400 font-sans dark:bg-zinc-800">
+    <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center bg-zinc-400 font-sans dark:bg-zinc-800">
          <WheelForm  />
     </div>
   );
