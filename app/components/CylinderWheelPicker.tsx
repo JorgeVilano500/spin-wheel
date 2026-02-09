@@ -7,10 +7,11 @@ type Props = {
     presets: WheelPreset[]; 
     activeId: string | null; 
     onSelect: (id: string) => void; 
+    onDoubleClick: (id: string) => void;
 }
 
 
-export default function CylinderWheelPicker({presets, activeId, onSelect}:Props) {
+export default function CylinderWheelPicker({presets, activeId, onSelect, onDoubleClick}:Props) {
 
 
     return (
@@ -41,8 +42,9 @@ export default function CylinderWheelPicker({presets, activeId, onSelect}:Props)
                                         <button
                                             key={p.id}
                                             onClick={() => onSelect(p.id)}
+                                            onDoubleClick={() => onDoubleClick(p.id)}
                                             className={[
-                                                "w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold",
+                                                "w-10 h-10 cursor-pointer rounded-full flex items-center justify-center text-xs font-semibold",
                                                 "transition-transform",
                                                 active ? 
                                                 "bg-black text-white scale-105 shadow-md": 

@@ -2,7 +2,8 @@
 import React, {useState, useMemo, useEffect} from 'react'
 import {CylinderWheelPicker, Wheel} from './index'
 import { fireConfetti } from '../lib/Confetti'
-import Preloaded from '../lib/Preloaded'
+import {GameMode, Preloaded} from '../lib/Preloaded'
+
 import { WheelPreset, savePresets, LoadPresets, uid } from '../lib/Wheels'
 
 export default function WheelForm () {
@@ -65,6 +66,19 @@ export default function WheelForm () {
         setRaw(p.items.join("\n"))
     }
     
+    const doubleClickDelete = (id: string) => {
+    
+        setPresets((prev) => 
+             prev.filter((x)=> x.id !=  id))
+        setActiveId(presets[0].id)
+        setRaw(presets[0].items.join("\n"))
+        
+    
+        console.log(presets.filter((x) => x.id != id))
+
+
+    }
+    
     const addWheel = () => {
         const name = `Wheel ${presets.length + 1}`;
         const newPreset: WheelPreset = {
@@ -113,6 +127,7 @@ export default function WheelForm () {
                         onSelect={selectPreset}
                         presets={presets}
                         activeId={activeId}
+                        onDoubleClick={doubleClickDelete}
                     />
                     <button 
                         onClick={addWheel}
@@ -156,6 +171,20 @@ export default function WheelForm () {
 
 
                     <section className='text-center flex flex-col justify-between gap-4 w-48'>
+
+                        {/* Will create a section to decide how the wheel decides to spin  */}
+                        {/* So far, Battle royale (last one standing, will be automatically removing each item after spinning), One from each list, default (what it is right now), First pick is the winner  */}
+
+                        <select
+                            className='bg-zinc-300'
+                        >
+                            {
+                                GameMode.map((item, i) => (
+                                    <option>{item.name}</option>
+                                ))
+                            }
+                        </select>
+
                         <select onChange={(e) => {
                             console.log(e.target.value)
                             setRaw(e.target.value)
