@@ -9,9 +9,11 @@ type SelectOptionsType = {
     setRaw: (name: string) => void; 
     raw: string 
     saveActionWheelItems: () => void
+    setGameMode: (gamemode: string) => void;
+    gameMode: string
 }
 
-function SelectOptions({setRaw, raw, saveActionWheelItems}: SelectOptionsType) {
+function SelectOptions({setRaw, raw, saveActionWheelItems, setGameMode, gameMode}: SelectOptionsType) {
 
 
     return (
@@ -23,10 +25,12 @@ function SelectOptions({setRaw, raw, saveActionWheelItems}: SelectOptionsType) {
 
         <select
             className='bg-zinc-300'
+            onChange={(e) => setGameMode(e.target.value)}
         >
+            
             {
                 GameMode.map((item, i) => (
-                    <option>{item.name}</option>
+                    <option value={item.type} >{item.name}</option>
                 ))
             }
         </select>

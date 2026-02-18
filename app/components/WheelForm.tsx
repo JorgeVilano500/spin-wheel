@@ -10,6 +10,8 @@ export default function WheelForm () {
     const [presets, setPresets] = useState<WheelPreset[]>([])
     const [activeId, setActiveId] = useState<string | null>(null);
 
+    const [gameMode, setGameMode] = useState<string>('DF');
+
     const [raw, setRaw] = useState("")
     const items = useMemo(
         () => raw.split("\n").map((s) => s.trim()).filter(Boolean),
@@ -55,9 +57,10 @@ export default function WheelForm () {
         const extraTurns = 6 + Math.floor(Math.random() * 6)
         const randomDeg = Math.random() * 360;
         setRotation((prev) => prev + extraTurns * 360 + randomDeg)
-        
+
 
     }
+    
 
     const selectPreset = (id: string) =>{
         const p = presets.find((x) => x.id === id);
@@ -105,6 +108,7 @@ export default function WheelForm () {
         )
         
     }
+    
 
     useEffect(() => {
         if(presets.length) savePresets(presets)
@@ -118,12 +122,14 @@ export default function WheelForm () {
             <h2 className='text-2xl font-semibold'>
                 Decide Your Fate
             </h2>
+
             {winner && <div className='text-lg text-red-600'>Winner: <b>{winner}</b></div>}
 
-        <section className='flex flex-row gap-4 w-full justify-around '>
+        <section className='flex flex-row gap-4 w-full lg:justify-evenly md:justify-around '>
 
             <div className=''>
                 <div className='pt-4'>  
+
                     <CylinderWheelPicker
                         onSelect={selectPreset}
                         presets={presets}
@@ -154,9 +160,29 @@ export default function WheelForm () {
                     className='mx-auto'
                     onSpinEnd={
                         ({winnerValue}) => {
-                            setWinner(winnerValue)
-                            setSpinning(false);
-                            fireConfetti();
+                            
+                            if(gameMode === "DF") {
+                                setWinner(winnerValue)
+                                setSpinning(false);
+                                fireConfetti();
+                            }
+                            else if(gameMode === "BR") {
+                                
+
+                                setRaw(prev => {
+                                        const items = prev.split("\n").map(s => s.trim()).filter(Boolean)
+                                        const remaining = items.filter(item => item !== winnerValue)
+                                        setSpinning(false);
+                                        if(remaining.length === 1) {
+                                            setWinner(winnerValue)
+                                            fireConfetti();
+                                        }
+                                        return remaining.join("\n")
+                                    }
+                                    
+                                )
+                            }
+
                         }
                     }
                 />
@@ -174,6 +200,8 @@ export default function WheelForm () {
                         raw={raw}
                         setRaw={setRaw}
                         saveActionWheelItems={saveActionWheelItems}
+                        setGameMode={setGameMode}
+                        gameMode={gameMode}
                     />
 
                     
@@ -185,6 +213,8 @@ export default function WheelForm () {
                             raw={raw}
                             setRaw={setRaw}
                             saveActionWheelItems={saveActionWheelItems}
+                            setGameMode={setGameMode}
+                            gameMode={gameMode}
                         />
 
                     </div>
